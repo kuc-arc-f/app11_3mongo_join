@@ -18,7 +18,9 @@ router.get('/index', async function(req, res) {
         var page_info = LibPagenate.get_page_start(page);       
 console.log( "page=",  page, page_info ); 
 //        var limit = {skip: page_info.start , limit: page_info.limit }
-        collection.aggregate([{
+        collection.aggregate([
+        {$sort: {created_at: -1} },
+        {
             $lookup: {
                 from: "books",
                 localField: "book_id",
@@ -39,26 +41,33 @@ console.log( "page=",  page, page_info );
 /******************************** 
 * 
 *********************************/
-router.get('/tasks_show/:id', async function(req, res) {
+router.get('/show/:id', async function(req, res) {
 console.log(req.params.id  );
     try{
-        const collection = await LibMongo.get_collection("tasks" )
-        var where = { _id: new ObjectID(req.params.id) }
-        var task = await collection.findOne(where) 
-        var param = {"docs": task };
-        res.json(param);        
+        const collection = await LibMongo.get_collection("orders" )
+        collection.aggregate([
+        { $match: { "_id": new ObjectID(req.params.id) } },
+        {
+            $lookup: {
+                from: "books",
+                localField: "book_id",
+                foreignField: "_id",
+                as: "book"
+            }
+        }]).toArray().then((docs) => {
+//console.log(docs[0]);
+            var param = {"docs": docs[0] };
+            res.json(param);
+        })        
     } catch (err) {
         console.log(err);
         res.status(500).send();    
     }    
 });
-
-/******************************** 
-* 
-*********************************/
+/*
 router.get('/tasks_delete/:id',async function(req, res) {
     try{
-        const collection = await LibMongo.get_collection("tasks" )
+        const collection = await LibMongo.get_collection("orders" )
         var where = { "_id": new ObjectID( req.params.id ) };
         await collection.deleteOne(where)
         res.json({id: req.params.id });
@@ -67,6 +76,7 @@ router.get('/tasks_delete/:id',async function(req, res) {
         res.status(500).send();    
     }    
 });
+*/
 /******************************** 
 * 
 *********************************/

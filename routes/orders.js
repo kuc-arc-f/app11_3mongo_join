@@ -74,9 +74,7 @@ console.log(req.params.id  );
     var task = await collection.findOne(where)
     res.render('orders/edit', {task: task });
 });
-/******************************** 
-* 
-*********************************/
+/*
 router.post('/update', async function(req, res, next) {
     try{
         var data = req.body
@@ -96,13 +94,14 @@ console.log(data )
         res.redirect('/orders')
     }        
 });
+*/
 /******************************** 
 * 
 *********************************/
 router.post('/delete', async function(req, res, next) {
     try{
         var data = req.body
-// console.log(data )  
+console.log(data )  
         var id = data.id
         const collection = await LibMongo.get_collection("orders" )
         var where = { "_id": new ObjectID( id ) };
@@ -126,6 +125,6 @@ router.get('/import_task', function(req, res, next) {
 *********************************/
 router.get('/test', function(req, res, next) {
     res.render('orders/test', {});
-  });
+});   
   
 module.exports = router;
