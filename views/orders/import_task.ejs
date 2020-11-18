@@ -49,7 +49,7 @@ class ImportTask extends React.Component {
         var task = {
             data: json,
         }
-        axios.post('/api/file_receive' , task ).then(res => {
+        axios.post('/api_orders/file_receive' , task ).then(res => {
                 console.log(res.data.ret );
                 if(res.data.ret !=null && parseInt(res.data.ret) == 1
                 ){
@@ -62,7 +62,7 @@ class ImportTask extends React.Component {
         return (
         <div className="container">
             <hr className="mt-2 mb-2" />
-            <h3 className="mt-2">Tasks- import:</h3>
+            <h3 className="mt-2">Orders- import:</h3>
             <hr />
             <p>select , json file</p>            
             <div>

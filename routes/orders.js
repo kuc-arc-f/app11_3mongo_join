@@ -74,27 +74,6 @@ console.log(req.params.id  );
     var task = await collection.findOne(where)
     res.render('orders/edit', {task: task });
 });
-/*
-router.post('/update', async function(req, res, next) {
-    try{
-        var data = req.body
-console.log(data )
-        const collection = await LibMongo.get_collection("orders" )
-        var item = { 
-            "title": req.body.title ,
-            "content": req.body.content
-        };           
-        var where = {"_id": new ObjectID( req.body.id )};
-        await collection.updateOne(where, { $set: item })
-        req.flash('success', 'Complete, save task');
-        return res.redirect('/orders')
-    } catch (e) {
-        console.log(e);
-        req.flash('err', 'Error ,save task');
-        res.redirect('/orders')
-    }        
-});
-*/
 /******************************** 
 * 
 *********************************/

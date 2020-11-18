@@ -4,7 +4,7 @@ var ObjectID = require('mongodb').ObjectID;
 const { performance } = require('perf_hooks');
 
 import LibMongo from "../libs/LibMongo"
-import LibTasks from "../libs/LibTasks"
+import LibOrders from "../libs/LibOrders"
 import LibPagenate from "../libs/LibPagenate"
 
 /******************************** 
@@ -17,17 +17,19 @@ router.get('/index', async function(req, res) {
         LibPagenate.init();
         var page_info = LibPagenate.get_page_start(page);       
 console.log( "page=",  page, page_info ); 
-//        var limit = {skip: page_info.start , limit: page_info.limit }
         collection.aggregate([
-        {$sort: {created_at: -1} },
-        {
-            $lookup: {
-                from: "books",
-                localField: "book_id",
-                foreignField: "_id",
-                as: "book"
+            {$skip: page_info.start },
+            {$limit: page_info.limit },
+            {$sort: {created_at: -1} },
+            {
+                $lookup: {
+                    from: "books",
+                    localField: "book_id",
+                    foreignField: "_id",
+                    as: "book"
+                }
             }
-        }]).toArray().then((docs) => {
+        ]).toArray().then((docs) => {
 //            console.log(docs);
             var param = LibPagenate.get_page_items(docs )
             res.json(param);
@@ -84,11 +86,11 @@ router.post('/file_receive', function(req, res, next) {
     let data = req.body
     var items = JSON.parse(data.data || '[]')
     var ret_arr = {ret:0, msg:""}
-//console.log( items )
-    var t0 = performance.now();
-    var ret = LibTasks.add_items(items)
-    var t1 = performance.now();
-console.log("Call to function took= " + (t1 - t0) + " milliseconds.");
+console.log( items )
+//    var t0 = performance.now();
+    var ret = LibOrders.add_items(items)
+//    var t1 = performance.now();
+//console.log("Call to function took= " + (t1 - t0) + " milliseconds.");
 
     if(ret){
         ret_arr.ret = 1

@@ -4,6 +4,7 @@
         <a href="/orders/add">[ Add ] </a>
     </div>
     <div class="col-sm-6">
+        <a href="/orders/import_task">[ import_task ] </a>
     </div>
 
 </div>
@@ -50,7 +51,7 @@ console.log( items );
     dispPagenate(){
 //console.log(this.state.paginate_disp)
         if(this.state.paginate_disp ===1){
-            var url = "/tasks?page="
+            var url = "/orders?page="
             return(
             <div className="paginate_wrap">
                 <div className="btn-group" role="group" aria-label="Basic example">
